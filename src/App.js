@@ -113,31 +113,33 @@ function App() {
   };
 
   // Replace the showMessage function in App.js
-const showMessage = (message, color) => {
-  const notification = document.createElement('div');
-  
-  // Use color mapping for proper Tailwind classes
-  const colorClasses = {
-    'green': 'bg-green-100 border-green-400 text-green-700',
-    'red': 'bg-red-100 border-red-400 text-red-700',
-    'blue': 'bg-blue-100 border-blue-400 text-blue-700',
-    'yellow': 'bg-yellow-100 border-yellow-400 text-yellow-700'
-  };
-  
-  notification.className = `fixed top-4 right-4 ${colorClasses[color] || colorClasses.blue} px-4 py-3 rounded-lg shadow-lg z-50`;
-  notification.innerHTML = `
+  const showMessage = (message, color) => {
+    const notification = document.createElement("div");
+
+    // Use color mapping for proper Tailwind classes
+    const colorClasses = {
+      green: "bg-green-100 border-green-400 text-green-700",
+      red: "bg-red-100 border-red-400 text-red-700",
+      blue: "bg-blue-100 border-blue-400 text-blue-700",
+      yellow: "bg-yellow-100 border-yellow-400 text-yellow-700",
+    };
+
+    notification.className = `fixed top-4 right-4 ${
+      colorClasses[color] || colorClasses.blue
+    } px-4 py-3 rounded-lg shadow-lg z-50`;
+    notification.innerHTML = `
     <div class="flex items-center">
       <i class="fas fa-check-circle mr-3"></i>
       <span>${message}</span>
     </div>
   `;
-  
-  document.body.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.remove();
-  }, 3000);
-};
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
+  };
 
   // Initial load
   useEffect(() => {
@@ -146,75 +148,85 @@ const showMessage = (message, color) => {
   }, []);
 
   return (
-    <div className="App bg-gray-50 min-h-screen p-4 md:p-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-            <i className="fas fa-tasks text-blue-500 mr-3"></i>Task Manager
-          </h1>
-          <p className="text-gray-600 style">
-            A simple CRUD application for testing frontend & backend development
-            skills
-          </p>
-        </header>
+    <>
+      <div className="App bg-gray-50 min-h-screen p-4 md:p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <header className="mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+              <i className="fas fa-tasks text-blue-500 mr-3"></i>Task Manager
+            </h1>
+            <p className="text-gray-600 style">
+              A simple CRUD application for testing frontend & backend
+              development skills
+            </p>
+          </header>
 
-        {/* API Status Indicator */}
-        <ApiStatus connected={apiConnected} message={apiMessage} />
+          {/* API Status Indicator */}
+          <ApiStatus connected={apiConnected} message={apiMessage} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column: Task Creation */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
-              <i className="fas fa-plus-circle text-green-500 mr-2"></i>Create
-              New Task
-            </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left Column: Task Creation */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex gap-4">
+                {/* New Card */}
+                <div className="w-48 h-32 bg-gray-100 border border-gray-300 rounded-xl flex items-center justify-center font-bold shadow">
+                  <h3>Just New</h3>
+                </div>
 
-            <TaskForm onCreateTask={createTask} />
+                {/* Existing Create New Task Card */}
+                <h2 className="text-xl font-bold text-gray-800 mb-6">
+                  <i className="fas fa-plus-circle text-green-500 mr-2"></i>
+                  Create New Task
+                </h2>
 
-            {/* API Test Buttons */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h3 className="text-lg font-medium text-gray-800 mb-4">
-                Quick API Tests
-              </h3>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  onClick={testGetTasks}
-                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition"
-                >
-                  <i className="fas fa-sync-alt mr-2"></i>GET /tasks
-                </button>
-                <button
-                  onClick={testHealth}
-                  className="px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg text-sm font-medium transition"
-                >
-                  <i className="fas fa-heartbeat mr-2"></i>GET /health
-                </button>
+                <TaskForm onCreateTask={createTask} />
+              </div>
+
+              {/* API Test Buttons */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <h3 className="text-lg font-medium text-gray-800 mb-4">
+                  Quick API Tests
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={testGetTasks}
+                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition"
+                  >
+                    <i className="fas fa-sync-alt mr-2"></i>GET /tasks
+                  </button>
+                  <button
+                    onClick={testHealth}
+                    className="px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg text-sm font-medium transition"
+                  >
+                    <i className="fas fa-heartbeat mr-2"></i>GET /health
+                  </button>
+                </div>
               </div>
             </div>
+
+            {/* Right Column: Task List */}
+            <TaskList
+              tasks={tasks}
+              loading={loading}
+              onDeleteTask={deleteTask}
+              onToggleComplete={toggleComplete}
+            />
           </div>
 
-          {/* Right Column: Task List */}
-          <TaskList
-            tasks={tasks}
-            loading={loading}
-            onDeleteTask={deleteTask}
-            onToggleComplete={toggleComplete}
-          />
+          {/* API Info Panel */}
+          <ApiInfo />
+
+          {/* Footer */}
+          <footer className="mt-8 text-center text-gray-500 text-sm">
+            <p>
+              Backend Developer Test • 10-15 minute assessment • Frontend ready
+              to use
+            </p>
+          </footer>
         </div>
-
-        {/* API Info Panel */}
-        <ApiInfo />
-
-        {/* Footer */}
-        <footer className="mt-8 text-center text-gray-500 text-sm">
-          <p>
-            Backend Developer Test • 10-15 minute assessment • Frontend ready to
-            use
-          </p>
-        </footer>
       </div>
-    </div>
+    </>
   );
 }
 

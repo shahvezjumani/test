@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Category from "./Category";
 
 const TaskForm = ({ onCreateTask }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,13 @@ const TaskForm = ({ onCreateTask }) => {
     setFormData((prev) => ({
       ...prev,
       [id]: value,
+    }));
+  };
+
+  const handleCategoryComponentChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      category: e.target.value,
     }));
   };
 
@@ -55,6 +63,10 @@ const TaskForm = ({ onCreateTask }) => {
           placeholder="Enter task title"
         />
       </div>
+      <Category
+        value={formData.category}
+        onChange={handleCategoryComponentChange}
+      />
 
       <div>
         <label
@@ -117,7 +129,7 @@ const TaskForm = ({ onCreateTask }) => {
       <div className="pt-4">
         <button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+          className="w-full bg-red-500 hover:bg-red-900 text-white font-medium py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
         >
           <i className="fas fa-plus mr-2"></i>Add Task
         </button>
